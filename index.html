@@ -5,25 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>PokeCryptic - Random Mode</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Additional inline styles to ensure basic functionality even if CSS fails */
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #b0adff; }
-    .card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
-    #input-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; }
-    .letter-box { width: 50px; height: 50px; border: 2px solid #333; text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; }
-    .space-box { width: 28px; height: 50px; }
-    .kb-key { padding: 10px 15px; margin: 2px; background: white; border: 1px solid #ccc; border-radius: 4px; }
-  </style>
 </head>
 <body>
   <header>
-    <h1 id="clue-date" style="text-align: center; color: white;">Random Puzzle</h1>
+    <h1 id="clue-date">Random Puzzle</h1>
   </header>
 
   <main>
     <!-- Clue Card -->
     <section id="clue-section" class="card">
-      <p id="clue-text" style="font-size: 1.2rem;">Loading clue...</p>
+      <p id="clue-text">Loading clue...</p>
     </section>
 
     <!-- Solve Card -->
@@ -33,9 +24,9 @@
 
     <!-- Counter Card -->
     <section id="counter-section" class="card">
-      <div class="hint-bar-wrap" style="position: relative; width: fit-content; margin: 0 auto;">
+      <div class="hint-bar-wrap">
         <div class="hint-dots is-high" id="hint-dots"></div>
-        <div class="par-label" style="position: absolute; bottom: -25px; right: 12px; display: flex; gap: 4px; color: white; font-weight: bold; text-shadow: -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 1px 1px 0 #333;">
+        <div class="par-label">
           <span class="par-text">Par</span>
           <span id="par-value" class="par-value">0</span>
         </div>
@@ -43,121 +34,82 @@
     </section>
 
     <!-- Button Card -->
-    <section id="button-section" class="card" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-      <button id="hint-btn" style="background: #ffd768; padding: 14px 28px; border-radius: 999px; border: none; font-weight: bold; font-size: 1.2rem;">Hints</button>
-      <button id="check-btn" disabled style="background: #d5f2ff; padding: 14px 28px; border-radius: 999px; border: none; font-weight: bold; font-size: 1.2rem; opacity: 0.5;">Check</button>
-      <button id="random-btn" style="background: #98fb98; padding: 14px 28px; border-radius: 999px; border: none; font-weight: bold; font-size: 1.2rem;">Random</button>
-      <button id="reset-progress" style="background: #ffa2a2; padding: 14px 28px; border-radius: 999px; border: none; font-weight: bold; font-size: 1.2rem;">Reset</button>
+    <section id="button-section" class="card">
+      <button id="hint-btn">Hints</button>
+      <button id="check-btn" disabled>Check</button>
+      <button id="random-btn" class="random-btn">Random</button>
+      <button id="reset-progress" class="reset-progress">Reset</button>
     </section>
 
     <!-- Solved Card -->
-    <section id="solved-section" class="card" style="display: none;">
-      <div class="hint-bar-wrap" style="position: relative; width: fit-content; margin: 0 auto;">
+    <section id="solved-section" class="card">
+      <div class="hint-bar-wrap">
         <div id="solved-hint-dots" class="hint-dots is-high"></div>
       </div>
-      <h3 id="solved-title" style="text-align: center; font-size: 1.6rem; margin: 10px 0;">Gotcha!</h3>
-      <p id="solved-timer" style="text-align: center;">Random puzzle solved!</p>
+      <h3 id="solved-title">Gotcha!</h3>
+      <p id="solved-timer">Random puzzle solved!</p>
     </section>
 
     <!-- Stats Card -->
-    <section id="stats-section" class="card" style="display: none;">
-      <div class="stat-row" style="display: flex; justify-content: space-between; margin: 6px 0;">
+    <section id="stats-section" class="card">
+      <div class="stat-row">
         <span class="stat-label">Solved by</span>
         <span class="stat-value" id="stats-solved">0 trainers</span>
       </div>
-      <div class="stat-row" style="display: flex; justify-content: space-between; margin: 6px 0;">
+      <div class="stat-row">
         <span class="stat-label">Par</span>
         <span class="stat-value" id="stats-par">0 hints</span>
       </div>
-      <div class="stat-row" style="display: flex; justify-content: space-between; margin: 6px 0;">
+      <div class="stat-row">
         <span class="stat-label">You used</span>
         <span class="stat-value" id="stats-hints">0 hints</span>
       </div>
     </section>
 
     <!-- Video Card -->
-    <section id="end-section" class="card" style="display: none;">
-      <h3 class="end-title" style="margin: 4px 0 10px; font-size: 1.2rem;">See how it works</h3>
+    <section id="end-section" class="card">
+      <h3 class="end-title">See how it works</h3>
       <div class="end-row">
         <a id="end-yt-link" class="yt-embed-link" target="_blank" rel="noopener noreferrer" href="#" style="display: none;">
-          <div id="end-yt-thumb" class="yt-embed-thumb" style="width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; border-radius: 12px; position: relative;">
-            <div class="yt-play-button" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;"></div>
+          <div id="end-yt-thumb" class="yt-embed-thumb">
+            <div class="yt-play-button"></div>
           </div>
         </a>
       </div>
-      <h3 class="end-title" style="margin: 4px 0 10px; font-size: 1.2rem;">Check out the hints</h3>
+      <h3 class="end-title">Check out the hints</h3>
       <div class="end-row">
-        <h4 style="margin-bottom: 4px;">Indicators</h4>
+        <h4>Indicators</h4>
         <p id="end-ind"></p>
       </div>
       <div class="end-row">
-        <h4 style="margin-bottom: 4px;">Fodder</h4>
+        <h4>Fodder</h4>
         <p id="end-fod"></p>
       </div>
       <div class="end-row">
-        <h4 style="margin-bottom: 4px;">Definition</h4>
+        <h4>Definition</h4>
         <p id="end-def"></p>
       </div>
     </section>
   </main>
 
-  <!-- Touch Keyboard -->
-  <div id="touch-keyboard" class="keyboard" style="position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; z-index: 900;">
-    <div class="keyboard-content" style="width: 100%; max-width: 600px; padding: 5px;">
-      <div class="kb-row" style="display: grid; grid-auto-flow: column; gap: 0; margin: 0;">
-        <button type="button" class="kb-key" data-key="Q" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">Q</button>
-        <button type="button" class="kb-key" data-key="W" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">W</button>
-        <button type="button" class="kb-key" data-key="E" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">E</button>
-        <button type="button" class="kb-key" data-key="R" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">R</button>
-        <button type="button" class="kb-key" data-key="T" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">T</button>
-        <button type="button" class="kb-key" data-key="Y" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">Y</button>
-        <button type="button" class="kb-key" data-key="U" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">U</button>
-        <button type="button" class="kb-key" data-key="I" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">I</button>
-        <button type="button" class="kb-key" data-key="O" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">O</button>
-        <button type="button" class="kb-key" data-key="P" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">P</button>
-      </div>
-      <div class="kb-row" style="display: grid; grid-auto-flow: column; gap: 0; margin: 0;">
-        <button type="button" class="kb-key" data-key="A" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">A</button>
-        <button type="button" class="kb-key" data-key="S" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">S</button>
-        <button type="button" class="kb-key" data-key="D" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">D</button>
-        <button type="button" class="kb-key" data-key="F" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">F</button>
-        <button type="button" class="kb-key" data-key="G" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">G</button>
-        <button type="button" class="kb-key" data-key="H" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">H</button>
-        <button type="button" class="kb-key" data-key="J" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">J</button>
-        <button type="button" class="kb-key" data-key="K" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">K</button>
-        <button type="button" class="kb-key" data-key="L" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">L</button>
-      </div>
-      <div class="kb-row" style="display: grid; grid-auto-flow: column; gap: 0; margin: 0;">
-        <button type="button" class="kb-key" data-key="Z" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">Z</button>
-        <button type="button" class="kb-key" data-key="X" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">X</button>
-        <button type="button" class="kb-key" data-key="C" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">C</button>
-        <button type="button" class="kb-key" data-key="V" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">V</button>
-        <button type="button" class="kb-key" data-key="B" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">B</button>
-        <button type="button" class="kb-key" data-key="N" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">N</button>
-        <button type="button" class="kb-key" data-key="M" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">M</button>
-        <button type="button" class="kb-key" data-key="⌫" style="padding: 12px 0; margin: 3px; background: white; border: none; border-radius: 4px; font-size: 1.1rem;">⌫</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Hint Modal -->
-  <div id="hint-modal" class="modal hidden" style="position: fixed; inset: 0; display: flex; justify-content: center; align-items: flex-end; z-index: 1000; pointer-events: none; display: none;">
-    <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 300px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.3); margin-bottom: 10px;">
-      <span class="close-btn" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer;">×</span>
-      <h3 style="margin-bottom: 15px;">Reveal</h3>
-      <ul style="list-style: none; padding: 0;">
-        <li style="margin: 10px 0;"><button class="hint-option hint-indicators" style="background: none; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; padding: 6px 8px;">Indicators</button></li>
-        <li style="margin: 10px 0;"><button class="hint-option hint-fodder" style="background: none; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; padding: 6px 8px;">Fodder</button></li>
-        <li style="margin: 10px 0;"><button class="hint-option hint-definition" style="background: none; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; padding: 6px 8px;">Definition</button></li>
-        <li style="margin: 10px 0;"><button class="hint-option hint-letter" style="background: none; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; padding: 6px 8px;">Letter</button></li>
+  <div id="hint-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h3>Reveal</h3>
+      <ul>
+        <li><button class="hint-option hint-indicators">Indicators</button></li>
+        <li><button class="hint-option hint-fodder">Fodder</button></li>
+        <li><button class="hint-option hint-definition">Definition</button></li>
+        <li><button class="hint-option hint-letter">Letter</button></li>
       </ul>
     </div>
   </div>
 
   <!-- Hint Toast -->
-  <div id="hint-toast" class="toast hidden" style="position: fixed; inset: 0; display: flex; justify-content: center; align-items: flex-end; z-index: 1100; pointer-events: none; display: none;">
-    <div class="toast-content" style="background: white; width: calc(100% - 40px); max-width: 500px; margin-bottom: 14px; border-radius: 12px; padding: 16px 56px 16px 16px; box-shadow: 0 6px 24px rgba(0,0,0,0.18); position: relative;">
-      <button class="toast-close" style="position: absolute; top: 4px; right: 6px; width: 22px; height: 22px; font-size: 2rem; background: transparent; border: none; cursor: pointer;">×</button>
+  <div id="hint-toast" class="toast hidden">
+    <div class="toast-content">
+      <button class="toast-close">×</button>
       <p id="toast-text"></p>
     </div>
   </div>

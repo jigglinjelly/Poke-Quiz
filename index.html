@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PokeCryptic - Random Mode</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1 id="clue-date">Random Puzzle</h1>
+  </header>
+
+  <main>
+    <!-- Clue Card -->
+    <section id="clue-section" class="card">
+      <p id="clue-text" data-base-clue="">Loading clue...</p>
+    </section>
+
+    <!-- Solve Card -->
+    <section id="solve-section" class="card">
+      <!-- Dynamic input boxes -->
+      <div id="input-grid" style="--cell: 50px;"></div>
+    </section>
+
+    <!-- Counter Card -->
+    <section id="counter-section" class="card">
+      <div class="hint-bar-wrap">
+        <div class="hint-dots is-high" id="hint-dots" style="--seg: 30px;"></div>
+        <div class="par-label">
+          <span class="par-text">Par</span>
+          <span id="par-value" class="par-value">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Button Card -->
+    <section id="button-section" class="card">
+      <button id="hint-btn" style="opacity: 1;">Hints</button>
+      <button id="check-btn" disabled="disabled" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">Check</button>
+      <button id="random-btn" class="random-btn">Random</button>
+      <button id="reset-progress" class="reset-progress">Reset</button>
+    </section>
+
+    <!-- Solved Card -->
+    <section id="solved-section" class="card">
+      <div class="hint-bar-wrap">
+        <div id="solved-hint-dots" class="hint-dots is-high" style="--seg: 30px;"></div>
+      </div>
+      <h3 id="solved-title">Gotcha!</h3>
+      <p id="solved-timer">Random puzzle solved!</p>
+    </section>
+
+    <!-- Stats Card -->
+    <section id="stats-section" class="card">
+      <div class="stat-row">
+        <span class="stat-label">Solved by</span>
+        <span class="stat-value" id="stats-solved">0 trainers</span>
+      </div>
+
+      <div class="stat-row">
+        <span class="stat-label">Par</span>
+        <span class="stat-value" id="stats-par">0 hints</span>
+      </div>
+
+      <div class="stat-row">
+        <span class="stat-label">You used</span>
+        <span class="stat-value" id="stats-hints">0 hints</span>
+      </div>
+    </section>
+
+    <!-- Video Card -->
+    <section id="end-section" class="card">
+      <h3 class="end-title">See how it works</h3>
+
+      <div class="end-row">
+        <a id="end-yt-link" class="yt-embed-link" target="_blank" rel="noopener noreferrer" href="#" style="display: none;">
+          <div id="end-yt-thumb" class="yt-embed-thumb" style="background-image: url('');">
+            <div class="yt-play-button"></div>
+          </div>
+        </a>
+      </div>
+
+      <h3 class="end-title">Check out the hints</h3>
+      <div class="end-row">
+        <h4>Indicators</h4>
+        <p id="end-ind"></p>
+      </div>
+
+      <div class="end-row">
+        <h4>Fodder</h4>
+        <p id="end-fod"></p>
+      </div>
+
+      <div class="end-row">
+        <h4>Definition</h4>
+        <p id="end-def"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Touch Keyboard -->
+  <div id="touch-keyboard" class="keyboard" aria-label="On-screen keyboard">
+    <div class="keyboard-content">
+      <div class="kb-row" data-keys="Q W E R T Y U I O P"></div>
+      <div class="kb-row" data-keys="A S D F G H J K L"></div>
+      <div class="kb-row" data-keys="Z X C V B N M ⌫"></div>
+    </div>
+  </div>
+
+  <!-- Hint Modal -->
+  <div id="hint-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h3>Reveal</h3>
+      <ul>
+        <li><button class="hint-option hint-indicators" style="display: inline-block;">Indicators</button></li>
+        <li><button class="hint-option hint-fodder" style="display: inline-block;">Fodder</button></li>
+        <li><button class="hint-option hint-definition" style="display: inline-block;">Definition</button></li>
+        <li><button class="hint-option hint-letter" style="display: inline-block;">Letter</button></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hint Toast -->
+  <div id="hint-toast" class="toast hidden" aria-live="polite" aria-atomic="true">
+    <div class="toast-content" role="status">
+      <button class="toast-close" aria-label="Close">×</button>
+      <p id="toast-text"></p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body></html>

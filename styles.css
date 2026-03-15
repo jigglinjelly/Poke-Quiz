@@ -1,0 +1,40 @@
+/* Navigation buttons */
+.random-btn,
+.reset-progress {
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 14px 28px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  border: none;
+  margin: 5px;
+}
+
+.random-btn {
+  background: #98fb98;  /* pale green */
+  color: black;
+}
+
+.random-btn:hover:not(:disabled) {
+  transform: scale(1.06);
+}
+
+.reset-progress {
+  background: #ffa2a2;
+  color: black;
+}
+
+.reset-progress:hover:not(:disabled) {
+  transform: scale(1.06);
+}
+
+/* Button section layout */
+#button-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+}

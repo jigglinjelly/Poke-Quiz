@@ -49,11 +49,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const endYtLink  = document.getElementById("end-yt-link");
   const endYtThumb = document.getElementById("end-yt-thumb");
 
-  // --- Touch Keyboard Setup ---
-  const kb = document.getElementById("touch-keyboard");
-  const kbRows = kb.querySelectorAll(".kb-row");
-
-  
   let clueAnswer = "";
   let revealedHints = { definition: false, fodder: false, indicators: false };
   let revealedLetters = [];
@@ -81,18 +76,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let solvedTimerInterval = null;
 
-  function formatHMS(ms) {
-    ms = Math.max(0, ms);
-    const totalSec = Math.floor(ms / 1000);
-    const h = String(Math.floor(totalSec / 3600)).padStart(2, "0");
-    const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, "0");
-    const s = String(totalSec % 60).padStart(2, "0");
-    return `${h}:${m}:${s}`;
-  }
-
   function startSolvedCountdown() {
     if (solvedTimerInterval) clearInterval(solvedTimerInterval);
-    // For random mode, just show a static message
     solvedTimer.textContent = "Random puzzle solved!";
   }
 
@@ -165,39 +150,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const n = Number(hintsUsed ?? 0);
     statsHintsEl.textContent = `${n} ${n === 1 ? "hint" : "hints"}`;
   }
-
-  // COMMENTED OUT - This was used for pokecryptic.com stats
-  /*
-  function getPostedKey() {
-    return `pc-posted-${getPuzzleId()}`;
-  }
-
-  async function postSolveIfNeeded() {
-    if (localStorage.getItem(getPostedKey()) === "1") return;
-
-    try {
-      const payload = {
-        puzzle: getPuzzleId(),
-        hintsUsed,
-      };
-
-      const res = await fetch("/api/stats", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) return;
-
-      const data = await res.json();
-      localStorage.setItem(getPostedKey(), "1");
-      setParUI(data.par);
-      setSolvedCountUI(data.total_solved);
-    } catch {
-      // ignore
-    }
-  }
-  */
 
   function getStorageKey() {
     return `clueProgress-${getPuzzleId()}`;
@@ -335,73 +287,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     hintBars.forEach(bar => bar.style.setProperty("--seg", `${seg}px`));
   }
 
-  // Build keys from data-keys attribute
-  kbRows.forEach(row => {
-    const keys = row.dataset.keys.split(" ");
-    row.innerHTML = ""; // Clear existing buttons
-    keys.forEach(k => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "kb-key";
-      btn.textContent = k;
-      btn.setAttribute("data-key", k);
-      row.appendChild(btn);
-    });
-  });
-
-  // Keep your "click outside input refocus" from blocking keyboard clicks
-  document.addEventListener("mousedown", (e) => {
-    if (solvedStatus) return;
-
-    if (e.target.closest("#touch-keyboard, #clue-section, #clue-date")) return;
-
-    if (!e.target.classList.contains("letter-box") && activeBox) {
-      e.preventDefault();
-      activeBox.focus();
-    }
-  }, true);
-
-  // Keyboard click handling
-  kb.addEventListener("click", (e) => {
-    const keyEl = e.target.closest(".kb-key");
-    if (!keyEl) return;
-
-    ensureActiveFocus();
-
-    if (!activeBox || activeBox.disabled) {
-      const first = firstEditableInput();
-      if (first) setActiveBox(first, { silent: true });
-    }
-    const inputs = getInputs();
-    const cur = activeBox;
-    if (!cur) return;
-    const idx = inputs.indexOf(cur);
-    const k = keyEl.getAttribute("data-key");
-
-    if (k === "⌫") {
-      if (cur.value) {
-        cur.value = "";
-        cur.dispatchEvent(new Event("input", { bubbles: true }));
-      } else {
-        const prev = prevEditableFrom(idx);
-        if (prev) {
-          setActiveBox(prev);
-          prev.value = "";
-          prev.dispatchEvent(new Event("input", { bubbles: true }));
-        }
-      }
-      return;
-    }
-
-    const letter = k.toUpperCase();
-    if (/^[A-Z0-9]$/.test(letter)) {
-      cur.value = letter;
-      cur.dispatchEvent(new Event("input", { bubbles: true }));
-      const next = nextEditableFrom(idx);
-      if (next) setActiveBox(next, { silent: true });
-    }
-  });
-
   function createInputGrid(answer) {
     inputGrid.innerHTML = "";
 
@@ -433,7 +318,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         box.type = "text";
         box.maxLength = 1;
         box.classList.add("letter-box");
-        box.setAttribute("inputmode", "none");
+        box.setAttribute("inputmode", "text");
         box.dataset.letterIndex = letterPos;
 
         if (!firstBox) {
@@ -544,9 +429,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function setCheckEnabled(enabled) {
     checkBtn.disabled = !enabled;
-    checkBtn.style.opacity = enabled ? "1" : "0.5";
-    checkBtn.style.cursor = enabled ? "pointer" : "not-allowed";
-    checkBtn.style.pointerEvents = enabled ? "auto" : "none";
   }
 
   let fitRaf = null;
@@ -666,35 +548,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function resetPuzzle() {
-    // Clear storage for current puzzle
     localStorage.removeItem(getStorageKey());
-    // COMMENTED OUT - This was for pokecryptic.com stats
-    // localStorage.removeItem(getPostedKey());
 
-    // Reset state
     solvedStatus = false;
     document.body.classList.remove("solved");
-    kb.disabled = false;
 
     if (solvedTimerInterval) {
       clearInterval(solvedTimerInterval);
       solvedTimerInterval = null;
     }
 
-    // Reset hint buttons
     setHintUsed(showDefinitionBtn, false);
     setHintUsed(showIndicatorsBtn, false);
     setHintUsed(showFodderBtn, false);
 
-    // Show all hint controls
     document.querySelectorAll(".hint-option").forEach(btn => {
       btn.style.display = "inline-block";
     });
 
     hintBtn.disabled = false;
-    hintBtn.style.opacity = "1";
 
-    // Load the puzzle
     loadPuzzle();
   }
 
@@ -707,7 +580,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const clue = clues[currentPuzzleIndex];
     if (!clue) return;
 
-    // Update UI
     clueDate.textContent = `Puzzle #${currentPuzzleIndex + 1}`;
     clueText.dataset.baseClue = clue.clue;
     clueAnswer = clue.answer;
@@ -752,9 +624,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(solvedStatus) {
       markAsSolved();
     }
-
-    // COMMENTED OUT - This was calling the stats function
-    // fetchStatsAndRender();
   }
 
   function getUserGuess() {
@@ -790,10 +659,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     setCheckEnabled(false);
     hintBtn.disabled = true;
-    hintBtn.style.opacity = "0.5";
 
     closeHintModal();
-    kb.disabled = true;
 
     if (activeBox) {
       activeBox.classList.remove("active");
@@ -802,9 +669,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     setHintsUsedUI();
     saveProgress();
-
-    // COMMENTED OUT - This was calling the stats function
-    // postSolveIfNeeded();
   }
 
   checkBtn.addEventListener("click", () => {
@@ -836,34 +700,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!hintToast.classList.contains("hidden")) hideHintToast();
       return;
     }
-    if (solvedStatus) return;
-
-    if (e.target && e.target.classList && e.target.classList.contains("letter-box")) return;
-
-    if (!activeBox) return;
-    if (document.body.classList.contains("modal-open") || document.body.classList.contains("toast-open")) return;
-    if (e.ctrlKey || e.metaKey) return;
-
-    const isLetter    = /^[a-zA-Z0-9]$/.test(e.key);
-    const isBackspace = e.key === "Backspace";
-    const isArrow     = e.key === "ArrowLeft" || e.key === "ArrowRight";
-
-    if (isLetter || isBackspace || isArrow) {
-      ensureActiveFocus();
-    }
-
-    if (isLetter) {
-      e.preventDefault();
-      activeBox.value = e.key.toUpperCase();
-      activeBox.dispatchEvent(new Event("input", { bubbles: true }));
-      return;
-    }
-
-    if (isBackspace || isArrow) {
-      e.preventDefault();
-      activeBox.dispatchEvent(new KeyboardEvent("keydown", { key: e.key }));
-      return;
-    }
   });
 
   // Modal controls
@@ -878,10 +714,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function setHintUsed(btn, used) {
     if (used) {
       btn.classList.add("is-disabled");
-      btn.setAttribute("aria-disabled", "true");
     } else {
       btn.classList.remove("is-disabled");
-      btn.removeAttribute("aria-disabled");
     }
   }
 
@@ -909,39 +743,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const targetInput = inputs[pos];
     if (!targetInput) return;
 
-    const wasActive = targetInput.classList.contains("active");
-
     targetInput.value = correctAnswer[pos];
     targetInput.disabled = true;
     targetInput.classList.add("revealed-letter");
-    targetInput.classList.remove("active");
 
     revealedLetters.push(pos);
     setCheckEnabled(isGridComplete());
-
-    if (wasActive) {
-      let next = null;
-
-      for (let i = pos + 1; i < inputs.length; i++) {
-        if (!inputs[i].disabled) {
-          next = inputs[i];
-          break;
-        }
-      }
-
-      if (!next) {
-        for (let i = 0; i < pos; i++) {
-          if (!inputs[i].disabled) {
-            next = inputs[i];
-            break;
-          }
-        }
-      }
-
-      if (next) {
-        setActiveBox(next, { silent: true });
-      }
-    }
 
     incrementHintsUsed();
 
@@ -954,29 +761,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (text === "") return;
     hintToastText.textContent = text;
     hintToast.classList.remove("hidden");
-    document.body.classList.add("toast-open");
-
-    setTimeout(() => {
-      const outsideClickOnce = (e) => {
-        if (!hintToastContent.contains(e.target)) hideHintToast();
-      };
-      document.addEventListener("click", outsideClickOnce, { once: true });
-    }, 0);
   }
 
   function hideHintToast() {
     hintToast.classList.add("hidden");
-    document.body.classList.remove("toast-open");
   }
 
   function openHintModal() {
     hintModal.classList.remove("hidden");
-    document.body.classList.add("modal-open");
   }
 
   function closeHintModal() {
     hintModal.classList.add("hidden");
-    document.body.classList.remove("modal-open");
   }
 
   hintToastClose.addEventListener("click", (e) => {

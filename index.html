@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>PokeCryptic - Random Mode</title>
   <link rel="stylesheet" href="styles.css">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 <body>
   <header>
@@ -50,7 +53,7 @@
     </section>
 
     <!-- Solved Card (hidden until solved) -->
-    <section id="solved-section" class="card" style="display: none;">
+    <section id="solved-section" class="card">
       <div class="hint-bar-wrap">
         <div id="solved-hint-dots" class="hint-dots is-high"></div>
       </div>
@@ -59,7 +62,7 @@
     </section>
 
     <!-- Stats Card (hidden until solved) -->
-    <section id="stats-section" class="card" style="display: none;">
+    <section id="stats-section" class="card">
       <div class="stat-row">
         <span class="stat-label">Solved by</span>
         <span class="stat-value" id="stats-solved">0 trainers</span>
@@ -75,10 +78,10 @@
     </section>
 
     <!-- Video Card (hidden until solved) -->
-    <section id="end-section" class="card" style="display: none;">
+    <section id="end-section" class="card">
       <h3 class="end-title">See how it works</h3>
       <div class="end-row">
-        <a id="end-yt-link" class="yt-embed-link" target="_blank" rel="noopener noreferrer" href="#" style="display: none;">
+        <a id="end-yt-link" class="yt-embed-link" target="_blank" rel="noopener noreferrer" href="#">
           <div id="end-yt-thumb" class="yt-embed-thumb">
             <div class="yt-play-button"></div>
           </div>

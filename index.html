@@ -35,23 +35,31 @@
 
     <!-- Button Card -->
     <section id="button-section" class="card">
-      <button id="hint-btn">Hints</button>
-      <button id="check-btn" disabled>Check</button>
-      <button id="random-btn" class="random-btn">Random</button>
-      <button id="reset-progress" class="reset-progress">Reset</button>
+      <div class="button-row">
+        <button id="hint-btn">Hints</button>
+        <button id="check-btn" disabled>Check</button>
+      </div>
+      <div class="button-row">
+        <button id="prev-btn" class="nav-btn">← Prev</button>
+        <button id="random-btn" class="nav-btn">Random</button>
+        <button id="next-btn" class="nav-btn">Next →</button>
+      </div>
+      <div class="button-row">
+        <button id="reset-progress" class="reset-btn">Reset Current</button>
+      </div>
     </section>
 
-    <!-- Solved Card -->
-    <section id="solved-section" class="card">
+    <!-- Solved Card (hidden until solved) -->
+    <section id="solved-section" class="card" style="display: none;">
       <div class="hint-bar-wrap">
         <div id="solved-hint-dots" class="hint-dots is-high"></div>
       </div>
       <h3 id="solved-title">Gotcha!</h3>
-      <p id="solved-timer">Random puzzle solved!</p>
+      <p id="solved-timer">Puzzle solved!</p>
     </section>
 
-    <!-- Stats Card -->
-    <section id="stats-section" class="card">
+    <!-- Stats Card (hidden until solved) -->
+    <section id="stats-section" class="card" style="display: none;">
       <div class="stat-row">
         <span class="stat-label">Solved by</span>
         <span class="stat-value" id="stats-solved">0 trainers</span>
@@ -66,8 +74,8 @@
       </div>
     </section>
 
-    <!-- Video Card -->
-    <section id="end-section" class="card">
+    <!-- Video Card (hidden until solved) -->
+    <section id="end-section" class="card" style="display: none;">
       <h3 class="end-title">See how it works</h3>
       <div class="end-row">
         <a id="end-yt-link" class="yt-embed-link" target="_blank" rel="noopener noreferrer" href="#" style="display: none;">

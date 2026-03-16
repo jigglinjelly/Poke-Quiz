@@ -247,7 +247,7 @@ button:disabled {
 }
 
 .modal.hidden {
-  display: none;
+  display: none !important;
 }
 
 .modal-content {
@@ -309,7 +309,7 @@ button:disabled {
 }
 
 .toast.hidden {
-  display: none;
+  display: none !important;
 }
 
 .toast:not(.hidden) {
@@ -412,20 +412,14 @@ button:disabled {
   padding: 0 2px;
 }
 
-/* REMOVED: The rules that were hiding elements when solved */
-/* 
-body.solved #button-section,
-body.solved #counter-section {
-  display: none;
-}
-*/
-
+/* Hide solved sections by default */
 #solved-section,
 #stats-section,
 #end-section {
   display: none;
 }
 
+/* Show them when body has solved class */
 body.solved #solved-section,
 body.solved #stats-section,
 body.solved #end-section {

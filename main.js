@@ -17,11 +17,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const clueText = document.getElementById("clue-text");
   const checkBtn = document.getElementById("check-btn");
   const hintBtn = document.getElementById("hint-btn");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+  const randomBtn = document.getElementById("random-btn");
+  const resetBtn = document.getElementById("reset-progress");
   const hintModal = document.getElementById("hint-modal");
   const closeBtn = document.querySelector(".close-btn");
   const inputGrid = document.getElementById("input-grid");
-  const resetBtn = document.getElementById("reset-progress");
-  const randomBtn = document.getElementById("random-btn");
 
   const showLetterBtn = document.querySelector(".hint-letter");
   const showDefinitionBtn = document.querySelector(".hint-definition");
@@ -74,13 +76,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!silent) saveProgress();
   }
 
-  let solvedTimerInterval = null;
-
-  function startSolvedCountdown() {
-    if (solvedTimerInterval) clearInterval(solvedTimerInterval);
-    solvedTimer.textContent = "Random puzzle solved!";
-  }
-
   let totalHintDots = 0;
 
   function buildHintDots(total) {
@@ -131,18 +126,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getPuzzleId() {
     return String(currentPuzzleIndex);
-  }
-
-  function setParUI(par) {
-    const v = Number(par ?? 0);
-    if (parValueEl) parValueEl.textContent = v;
-    if (statsParEl) statsParEl.textContent = `${v} ${v === 1 ? "hint" : "hints"}`;
-  }
-
-  function setSolvedCountUI(totalSolved) {
-    const n = Number(totalSolved ?? 0);
-    const label = `${n} ${n === 1 ? "trainer" : "trainers"}`;
-    if (statsSolvedEl) statsSolvedEl.textContent = label;
   }
 
   function setHintsUsedUI() {
@@ -548,39 +531,39 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function resetPuzzle() {
+    // Clear storage for current puzzle
     localStorage.removeItem(getStorageKey());
 
+    // Reset state
     solvedStatus = false;
     document.body.classList.remove("solved");
 
-    if (solvedTimerInterval) {
-      clearInterval(solvedTimerInterval);
-      solvedTimerInterval = null;
-    }
-
+    // Reset hint buttons
     setHintUsed(showDefinitionBtn, false);
     setHintUsed(showIndicatorsBtn, false);
     setHintUsed(showFodderBtn, false);
+    revealedHints = { definition: false, fodder: false, indicators: false };
+    revealedLetters = [];
+    hintsUsed = 0;
+    renderHintDots();
+    setHintsUsedUI();
 
+    // Show all hint controls
     document.querySelectorAll(".hint-option").forEach(btn => {
       btn.style.display = "inline-block";
     });
 
     hintBtn.disabled = false;
 
+    // Load the puzzle
     loadPuzzle();
-  }
-
-  function loadRandomPuzzle() {
-    currentPuzzleIndex = Math.floor(Math.random() * clues.length);
-    resetPuzzle();
   }
 
   function loadPuzzle() {
     const clue = clues[currentPuzzleIndex];
     if (!clue) return;
 
-    clueDate.textContent = `Puzzle #${currentPuzzleIndex + 1}`;
+    clueDate.textContent = `Puzzle #${currentPuzzleIndex + 1} of ${clues.length}`;
     clueText.dataset.baseClue = clue.clue;
     clueAnswer = clue.answer;
 
@@ -626,6 +609,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  function loadPrevPuzzle() {
+    if (clues.length === 0) return;
+    currentPuzzleIndex = (currentPuzzleIndex - 1 + clues.length) % clues.length;
+    resetPuzzle();
+  }
+
+  function loadNextPuzzle() {
+    if (clues.length === 0) return;
+    currentPuzzleIndex = (currentPuzzleIndex + 1) % clues.length;
+    resetPuzzle();
+  }
+
+  function loadRandomPuzzle() {
+    if (clues.length === 0) return;
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * clues.length);
+    } while (clues.length > 1 && newIndex === currentPuzzleIndex);
+    currentPuzzleIndex = newIndex;
+    resetPuzzle();
+  }
+
   function getUserGuess() {
     let guess = "";
     inputGrid.childNodes.forEach(node => {
@@ -645,8 +650,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     requestAnimationFrame(() => {
       fitHintBarToWidth();
     });
-
-    startSolvedCountdown();
 
     inputGrid.querySelectorAll("input").forEach(inp => {
       inp.disabled = true;
@@ -704,12 +707,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Modal controls
   hintBtn.addEventListener("click", openHintModal);
-
   closeBtn.addEventListener("click", closeHintModal);
 
   window.addEventListener("click", (e) => {
     if (e.target === hintModal) closeHintModal();
   });
+
+  // Navigation buttons
+  if (prevBtn) prevBtn.addEventListener("click", loadPrevPuzzle);
+  if (nextBtn) nextBtn.addEventListener("click", loadNextPuzzle);
+  if (randomBtn) randomBtn.addEventListener("click", loadRandomPuzzle);
+  if (resetBtn) resetBtn.addEventListener("click", resetPuzzle);
 
   function setHintUsed(btn, used) {
     if (used) {
@@ -823,14 +831,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     incrementHintsUsed();
     showHintToast(clue.fod_text);
   });
-
-  if (resetBtn) {
-    resetBtn.addEventListener("click", resetPuzzle);
-  }
-
-  if (randomBtn) {
-    randomBtn.addEventListener("click", loadRandomPuzzle);
-  }
 
   loadClues();
 });

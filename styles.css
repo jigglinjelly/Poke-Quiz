@@ -412,6 +412,14 @@ button:disabled {
   padding: 0 2px;
 }
 
+/* REMOVED: The rules that were hiding elements when solved */
+/* 
+body.solved #button-section,
+body.solved #counter-section {
+  display: none;
+}
+*/
+
 #solved-section,
 #stats-section,
 #end-section {
@@ -422,11 +430,6 @@ body.solved #solved-section,
 body.solved #stats-section,
 body.solved #end-section {
   display: block;
-}
-
-body.solved #button-section,
-body.solved #counter-section {
-  display: none;
 }
 
 @keyframes solved-enter {

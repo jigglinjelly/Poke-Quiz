@@ -782,6 +782,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   function closeHintModal() {
     hintModal.classList.add("hidden");
   }
+  // ... (keep the main.js from previous message, but verify markAsSolved function)
+
+function markAsSolved() {
+  solvedStatus = true;
+  document.body.classList.add("solved");
+
+  requestAnimationFrame(() => {
+    fitHintBarToWidth();
+  });
+
+  inputGrid.querySelectorAll("input").forEach(inp => {
+    inp.disabled = true;
+    inp.classList.add("solved-letter");
+  });
+
+  // Don't hide hint options - let them remain visible but disabled
+  // Just update their visual state
+  setHintUsed(showDefinitionBtn, true);
+  setHintUsed(showIndicatorsBtn, true);
+  setHintUsed(showFodderBtn, true);
+
+  setCheckEnabled(false);
+  hintBtn.disabled = true;
+
+  closeHintModal();
+
+  if (activeBox) {
+    activeBox.classList.remove("active");
+    activeBox = null;
+  }
+
+  setHintsUsedUI();
+  saveProgress();
+  }
 
   hintToastClose.addEventListener("click", (e) => {
     e.stopPropagation();
